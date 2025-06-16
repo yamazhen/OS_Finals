@@ -432,9 +432,9 @@ class Simulator:
         if virtual_addresses is None:
             virtual_addresses = self.generate_virtual_addresses(reference_string)
         
-        frames = [None] * frame_size
-        reference_bits = [0] * frame_size
-        page_table = {}
+        frames = []  
+        reference_bits = []  
+        page_table = {}  
         tlb = TLB(self.tlb_size)
         page_faults = 0
         steps = []
@@ -443,19 +443,14 @@ class Simulator:
         for i, page in enumerate(reference_string):
             virtual_addr = virtual_addresses[i]
             
-            
             if page in page_table:
-                
-                for j, frame_page in enumerate(frames):
-                    if frame_page == page:
-                        reference_bits[j] = 1  
-                        break
+                frame_index = page_table[page]
+                reference_bits[frame_index] = 1
                 
                 physical_addr, _, tlb_miss = self.virtual_to_physical(virtual_addr, page_table, tlb)
-                current_frames = [f for f in frames if f is not None]
                 steps.append({
                     'page': page,
-                    'frames': current_frames,
+                    'frames': frames.copy(),
                     'fault': False,
                     'tlb_miss': tlb_miss,
                     'virtual_addr': virtual_addr,
@@ -465,50 +460,39 @@ class Simulator:
                     'reference_bits': reference_bits.copy()
                 })
             else:
-                
                 page_faults += 1
                 
-                
-                empty_slot = None
-                for j in range(frame_size):
-                    if frames[j] is None:
-                        empty_slot = j
-                        break
-                
-                if empty_slot is not None:
-                    
-                    frames[empty_slot] = page
-                    reference_bits[empty_slot] = 1
-                    page_table[page] = empty_slot
+                if len(frames) < frame_size:
+                    frames.append(page)
+                    reference_bits.append(1)  
+                    page_table[page] = len(frames) - 1
                 else:
+                    replaced = False
                     
-                    while True:
+                    while not replaced:
                         if reference_bits[clock_hand] == 0:
-                            
-                            old_page = frames[clock_hand]
-                            if old_page in page_table:
-                                del page_table[old_page]
-                                tlb.invalidate(old_page)
+                            victim_page = frames[clock_hand]
                             
                             frames[clock_hand] = page
-                            reference_bits[clock_hand] = 1
+                            reference_bits[clock_hand] = 1  
+                            
+                            if victim_page in page_table:
+                                del page_table[victim_page]
+                            tlb.invalidate(victim_page)
                             page_table[page] = clock_hand
                             
                             clock_hand = (clock_hand + 1) % frame_size
-                            break
+                            replaced = True
                         else:
-                            
                             reference_bits[clock_hand] = 0
                             clock_hand = (clock_hand + 1) % frame_size
                 
-                
                 physical_addr, _, tlb_miss = self.virtual_to_physical(virtual_addr, page_table, tlb)
-                current_frames = [f for f in frames if f is not None]
                 steps.append({
                     'page': page,
-                    'frames': current_frames,
+                    'frames': frames.copy(),
                     'fault': True,
-                    'tlb_miss': True,  
+                    'tlb_miss': True,
                     'virtual_addr': virtual_addr,
                     'physical_addr': physical_addr,
                     'tlb': tlb,

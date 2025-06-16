@@ -65,8 +65,8 @@ def main():
                     },
                     {
                         "name": "Clock Algorithm Demonstration",
-                        "description": "Mixed access pattern showing Clock's second-chance behavior",
-                        "reference_string": [1, 2, 3, 1, 4, 1, 2, 5],
+                        "description": "Classic textbook example showing Clock outperforming FIFO",
+                        "reference_string": [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2],
                         "frame_size": 3
                     }
                 ]

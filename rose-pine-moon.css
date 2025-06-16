@@ -149,3 +149,39 @@ marp-pre {
 .hljs-meta {
   color: var(--subtle);
 }
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.columns > div {
+  min-width: 0;
+}
+
+.flex-columns {
+  display: flex;
+  gap: 2em;
+}
+
+.flex-columns > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.columns pre,
+.flex-columns pre {
+  font-size: 0.8em;
+  overflow-x: auto;
+}
+
+.columns p,
+.flex-columns p {
+  font-size: 18pt;
+}
+
+.columns ul,
+.flex-columns ul {
+  font-size: 18pt;
+}

@@ -433,7 +433,28 @@ if (fork() == 0) {
 
 # Part B: Copy-on-Write Demonstration Output
 
-*[Screenshot of /proc/[pid]/status before and after COW]*
+<div class="centered">
+
+![width:600px height:400px](images/cow.png)
+
+</div>
+
+---
+
+# Part B: Copy-on-Write Demonstration Output (Cont.)
+
+<div class="columns">
+<div>
+
+![width:600px height:500px](images/parent_cow.png)
+
+</div>
+<div>
+
+![width:600px height:500px](images/child_cow.png)
+
+</div>
+</div>
 
 ---
 
@@ -484,7 +505,11 @@ int main() {
 
 # Part B: Memory Pressure & Thrashing Output
 
-![width:600px height:400px](thrashing.png)
+<div class="centered">
+
+![width:600px height:400px](images/thrashing.png)
+
+</div>
 
 ---
 

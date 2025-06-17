@@ -185,3 +185,9 @@ marp-pre {
 .flex-columns ul {
   font-size: 18pt;
 }
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

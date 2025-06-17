@@ -268,12 +268,12 @@ while not replaced:
 <div class="columns">
 <div>
 
-*[Screenshot of Test Case Console Output]*
+![width:600px height:400px](images/testcase1_console.png)
 
 </div>
 <div>
 
-*[Screenshot of Test Case Graph]*
+![width:600px height:400px](images/testcase1_graph.png)
 
 </div>
 </div>
@@ -285,12 +285,12 @@ while not replaced:
 <div class="columns">
 <div>
 
-*[Screenshot of Test Case Console Output]*
+![width:600px height:400px](images/testcase2_console.png)
 
 </div>
 <div>
 
-*[Screenshot of Test Case Graph]*
+![width:600px height:400px](images/testcase2_graph.png)
 
 </div>
 </div>
@@ -302,12 +302,12 @@ while not replaced:
 <div class="columns">
 <div>
 
-*[Screenshot of Test Case Console Output]*
+![width:600px height:400px](images/testcase3_console.png)
 
 </div>
 <div>
 
-*[Screenshot of Test Case Graph]*
+![width:600px height:400px](images/testcase3_graph.png)
 
 </div>
 </div>
@@ -319,12 +319,12 @@ while not replaced:
 <div class="columns">
 <div>
 
-*[Screenshot of Test Case Console Output]*
+![width:600px height:400px](images/testcase4_console.png)
 
 </div>
 <div>
 
-*[Screenshot of Test Case Graph]*
+![width:600px height:400px](images/testcase4_graph.png)
 
 </div>
 </div>
@@ -339,7 +339,7 @@ while not replaced:
 ## Tools Used
 - `/usr/bin/time -v`
 - `mmap()` system call
-- Large memory allocations
+- `sync && echo 3 > /proc/sys/vm/drop_caches`
 
 </div>
 <div>
@@ -359,13 +359,17 @@ for (int i = 0; i < size; i += 4096) {
 
 # Part B: Page Fault Monitoring Output
 
-*[Screenshot of time -v output showing minor/major page faults]*
+<div class="centered">
+
+![width:600px height:400px](images/page_faults.png)
+
+</div>
 
 ---
 
 # Part B: TLB Performance Analysis
 
-## Tool Used: `perf stat -e dTLB-load-misses`
+## Tool Used: `perf stat -e dTLB-load-misses,dTLB-loads`
 
 <div class="columns">
 <div>
@@ -394,7 +398,18 @@ for (int i = 0; i < size; i++) {
 
 # Part B: TLB Performance Analysis Results
 
-*[Screenshot comparing perf stat results for sequential vs random access]*
+<div class="columns">
+<div>
+
+![width:800px height:500px](images/tlb_sequential.png)
+
+</div>
+<div>
+
+![width:800px height:500px](images/tlb_random.png)
+
+</div>
+</div>
 
 ---
 

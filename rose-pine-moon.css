@@ -91,6 +91,7 @@ li {
   color: var(--subtle);
 }
 img {
+  border-radius: 8px;
   background-color: var(--highlight-low);
 }
 strong {

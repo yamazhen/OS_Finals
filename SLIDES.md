@@ -399,30 +399,30 @@ for (int i = 0; i < size; i++) {
 ---
 
 # Part B: Copy-on-Write Demonstration
-
 <div class="columns">
 <div>
 
-## Implementation
+## Memory Allocation & Setup
 ```c
-pid_t pid = fork();
-if (pid == 0) {
-    // Child process
-    shared_data[0] = 999;
-    printf("Child modified data\n");
-}
+size_t size = 10 * 1024 * 1024;
+char *memory = malloc(size);
+memset(memory, 'A', size);
+printf("Parent allocated %zu MB\n", 
+       size / (1024 * 1024));
 ```
 
 </div>
 <div>
 
-## Monitoring
+## Child Process - Triggering COW
 ```c
-else {
-    // Parent process
-    sleep(1);
-    printf("Parent data: %d\n", 
-           shared_data[0]);
+if (fork() == 0) {
+    printf("Child: Writing to trigger COW...\n");
+    for (size_t i = 0; i < size; i += 4096) {
+        memory[i] = 'B';  // Write to each page
+    }
+    printf("Child: COW triggered\n");
+    exit(0);
 }
 ```
 
@@ -442,22 +442,40 @@ else {
 <div class="columns">
 <div>
 
-## Tools Used
-- `stress --vm 4 --vm-bytes 512M`
-- `vmstat` for monitoring
-- `top` for system load
+## Implementation
+```c
+volatile int running = 1;
+void stop(int sig) {
+    (void)sig;
+    running = 0;
+}
+
+int main() {
+    signal(SIGINT, stop);
+    printf("Thrashing Demo - Press Ctrl+C to stop\n");
+
+    size_t size = 500 * 1024 * 1024;
+    char *memory = malloc(size);
+
+    while (running) {
+        for (size_t i = 0; i < size && running; i += 4096) {
+            memory[i] = 1;
+        }
+    }
+
+    free(memory);
+    printf("Thrashing demo stopped\n");
+    return 0;
+}
+```
 
 </div>
 <div>
 
-## Commands
-```bash
-# Create memory pressure
-stress --vm 4 --vm-bytes 512M &
+## Tools Used
 
-# Monitor system
-vmstat 1 10
-```
+- Custom thrashing program (500MB allocation)
+- `vmstat` for monitoring system statistics
 
 </div>
 </div>
@@ -466,7 +484,7 @@ vmstat 1 10
 
 # Part B: Memory Pressure & Thrashing Output
 
-*[Screenshot of vmstat output showing swap activity and system load]*
+![width:600px height:400px](thrashing.png)
 
 ---
 

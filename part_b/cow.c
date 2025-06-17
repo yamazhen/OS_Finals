@@ -43,7 +43,8 @@ int main() {
     printf("\n=== Child Process (PID: %d) ===\n", getpid());
     print_memory_usage("Child after fork (before COW)");
 
-    sleep(2);
+    printf("Waiting 5 seconds before COW...\n");
+    sleep(5);
 
     printf("Child: Writing to trigger COW...\n");
     for (size_t i = 0; i < size; i += 4096) {
@@ -51,7 +52,8 @@ int main() {
     }
 
     print_memory_usage("Child after COW writes");
-    sleep(2);
+    printf("Waiting 5 seconds after COW...\n");
+    sleep(5);
 
     printf("Child: COW triggered\n");
     exit(0);
@@ -60,7 +62,8 @@ int main() {
     printf("Child PID: %d\n", pid);
     print_memory_usage("Parent after fork (sharing memory)");
 
-    sleep(3);
+    printf("You have 10 seconds to check /proc/%d/status\n", pid);
+    sleep(8);
 
     wait(NULL);
     print_memory_usage("Parent after child completes");

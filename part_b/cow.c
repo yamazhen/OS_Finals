@@ -23,7 +23,8 @@ void print_memory_usage(const char *label) {
   }
   fclose(status);
 
-  printf("%s - VmSize: %ld KB, VmRSS: %ld KB\n", label, vm_size, vm_rss);
+  printf("%s - PID: %d, VmSize: %ld KB, VmRSS: %ld KB\n", label, getpid(),
+         vm_size, vm_rss);
 }
 
 int main() {
@@ -39,8 +40,10 @@ int main() {
   pid_t pid = fork();
 
   if (pid == 0) {
-    printf("\n=== Child Process ===\n");
+    printf("\n=== Child Process (PID: %d) ===\n", getpid());
     print_memory_usage("Child after fork (before COW)");
+
+    sleep(2);
 
     printf("Child: Writing to trigger COW...\n");
     for (size_t i = 0; i < size; i += 4096) {
@@ -48,11 +51,16 @@ int main() {
     }
 
     print_memory_usage("Child after COW writes");
+    sleep(2);
+
     printf("Child: COW triggered\n");
     exit(0);
   } else {
-    printf("\n=== Parent Process ===\n");
+    printf("\n=== Parent Process (PID: %d) ===\n", getpid());
+    printf("Child PID: %d\n", pid);
     print_memory_usage("Parent after fork (sharing memory)");
+
+    sleep(3);
 
     wait(NULL);
     print_memory_usage("Parent after child completes");

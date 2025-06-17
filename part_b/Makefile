@@ -35,4 +35,11 @@ test: all
 	@echo "Warning: This may slow down your system!"
 	./thrashing
 
-.PHONY: all clean test
+test-tlb-perf: tlb_effects
+	@echo "=== TLB Sequential Test with Perf ==="
+	-perf stat -e dTLB-load-misses,dTLB-loads ./tlb_effects sequential
+	@echo ""
+	@echo "=== TLB Random Test with Perf ==="
+	-perf stat -e dTLB-load-misses,dTLB-loads ./tlb_effects random
+
+.PHONY: all clean test test-tlb-perf
